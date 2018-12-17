@@ -27,7 +27,7 @@ public class WPZustand extends Zustand{						//Defintion der Zustaende fuer Wass
 		return ;
 	}
 */
-	public String toString(){					//Overrides: equals in class java.lang.Object
+	public String toString(){								//Overrides: String in class java.lang.Object
 		String str;
 		str = "<" + k1 + "," + k2 + ">";
 		return str;

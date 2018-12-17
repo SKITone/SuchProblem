@@ -9,6 +9,7 @@ import java.util.LinkedList;
 public class Breitensuche implements TreeSearch{
 
 	LinkedList<Knoten> open = new LinkedList<Knoten>();
+	LinkedList<Knoten> close = new LinkedList<Knoten>();
 	SuchProblem suchproblem;
 	Knoten K;
 	int d_max;
@@ -52,15 +53,22 @@ public class Breitensuche implements TreeSearch{
 		K= select();
 		//System.out.println("test");
 		if (isGoalNode(K)) {
-			System.out.println(K.getState()+" "+K.getPredNode()+" "+K.getTiefe());
-			System.out.println(open);
+			System.out.println("Zustand: "+K.getState()+", vorheriger Knoten: "+K.getPredNode()+", Tiefe: "+K.getTiefe());
+			System.out.println("offene Knoten: "+open);
+			System.out.println("abgeschlossene Knoten: "+close);
 			return K;
 		}
 		if (K.getTiefe()==9 || K.getTiefe()==d_max) {
-			System.out.println("zu Tief - Abbruch");
+			System.err.println("zu Tief - Abbruch");
 			return null;
 		}
+
+		close.add(K);
 		update();	
 		return loop();
+	}
+	
+	public LinkedList<Knoten> getabgelaufeneKnoten(){
+		return close;
 	}
 }

@@ -12,12 +12,18 @@ import java.util.Stack;
 public class Tiefensuche implements TreeSearch {
 	
 	Stack<Knoten> open = new Stack<Knoten>();
+	LinkedList<Knoten> close = new LinkedList<Knoten>();
 	SuchProblem suchproblem;
 	Knoten K;
-	int d_max;
+	int d_max=10;														//manuell begrenzte Tiefe (vermeidet Programmabsturz)
 	
-	public Tiefensuche(SuchProblem suchproblem, int d_max) {
+	public Tiefensuche(SuchProblem suchproblem, int d_max) {			//Konstruktor für Tiefensuche mit begrenzter Tiefe
 		this.d_max=d_max;
+		this.suchproblem=suchproblem;
+		open.add(new Knoten(suchproblem.getStartState()));				//Die Warteschlange open wird mit dem Wurzelknoten des Suchbaums initialisiert. 
+	}
+	
+	public Tiefensuche(SuchProblem suchproblem) {						////Konstruktor für Tiefensuche mit unbegrenzter Tiefe
 		this.suchproblem=suchproblem;
 		open.add(new Knoten(suchproblem.getStartState()));				//Die Warteschlange open wird mit dem Wurzelknoten des Suchbaums initialisiert. 
 	}
@@ -26,7 +32,7 @@ public class Tiefensuche implements TreeSearch {
 	public Knoten select() {
 		// TODO Auto-generated method stub
 		
-		Knoten knoten=open.pop();									//letzte Knoten der Liste wird gewählt, Knoten wird aus Liste gelöscht										
+		Knoten knoten=open.pop();										//letzte Knoten der Liste wird gewählt, Knoten wird aus Liste gelöscht										
 		return knoten;
 	}
 
@@ -55,14 +61,17 @@ public class Tiefensuche implements TreeSearch {
 		K= select();
 		//System.out.println("test");
 		if (isGoalNode(K)) {
-			System.out.println(K.getState()+" "+K.getPredNode()+" "+K.getTiefe());
-			System.out.println(open);
+			System.out.println("Zustand: "+K.getState()+", vorheriger Knoten: "+K.getPredNode()+", Tiefe: "+K.getTiefe()+", Tiefenbegrenzung: "+d_max);
+			System.out.println("offene Knoten: "+open);
+			System.out.println("abgeschlossene Knoten: "+close);
 			return K;
 		}
 		if (K.getTiefe()<d_max) {
+			close.add(K);
 			update();
 			return loop();
 		} else {
+			close.add(K);
 			return loop();
 		}	
 	}
